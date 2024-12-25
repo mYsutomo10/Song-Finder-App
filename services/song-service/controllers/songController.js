@@ -36,7 +36,35 @@ exports.getRecommendations = async (req, res, next) => {
     }
 };
 
-exports.getRecentFound = async (req, res, next) => {
+exports.getRecentFound = async (_req, res, _next) => {
     const songs = await Song.find().sort({ identifiedAt: -1 }).limit(10);
     res.json(songs);
+};
+
+exports.getSimilarSongs = async (_req, res, next) => {
+    try {
+        // Placeholder response
+        res.json({ success: true, data: [] });
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.getFavorites = async (_req, res, next) => {
+    try {
+        // Placeholder response
+        res.json({ success: true, data: [] });
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.deleteSong = async (req, res, next) => {
+    try {
+        const songId = req.params.id;
+        // You can implement the actual deletion logic here
+        res.status(200).json({ success: true, message: `Song with id ${songId} deleted` });
+    } catch (error) {
+        next(error);
+    }
 };

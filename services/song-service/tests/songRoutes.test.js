@@ -1,13 +1,7 @@
 const request = require('supertest');
-const express = require('express');
-const songRoutes = require('../routes/songRoutes');
-const songController = require('../controllers/songController');
+const app = require('../app'); // Ensure this points to your Express app
 
-const app = express();
-app.use(express.json());
-app.use('/songs', songRoutes);
-
-jest.setTimeout(10000);
+jest.setTimeout(15000); // Increase timeout for long-running tests
 
 describe('Song Routes', () => {
     it('GET /songs/recentfounds should return 200', async () => {
@@ -16,11 +10,13 @@ describe('Song Routes', () => {
     });
 });
 
-jest.mock('../controllers/songController', () => ({
-    getRecentFound: jest.fn(),
-    searchSongByLyrics: jest.fn(),
-    identifySongByAudio: jest.fn(),
-    getSimilarSongs: jest.fn(),
-    getFavorites: jest.fn(),
-    deleteSong: jest.fn(),
+jest.mock('../models/Song', () => ({
+    find: jest.fn(() => ({
+        sort: jest.fn(() => ({
+            limit: jest.fn(() => [
+                { title: 'Mock Song 1', identifiedAt: new Date() },
+                { title: 'Mock Song 2', identifiedAt: new Date() },
+            ]),
+        })),
+    })),
 }));

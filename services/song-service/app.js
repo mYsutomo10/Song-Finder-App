@@ -16,7 +16,3 @@ app.use('/songs', songRoutes);
 app.use(errorHandler);
 
 module.exports = app;
-
-afterAll(() => {
-    app.close(); // Replace with the correct teardown method for your app
-});
