@@ -1,0 +1,23 @@
+{
+  "name": "song-finder-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:api-gateway": "node services/api-gateway/app.js",
+    "start:song-service": "node services/song-service/app.js",
+    "start:database-service": "node services/database-service/mongoose.js",
+    "start:error-handler-service": "node services/error-handler-service/errorHandler.js",
+    "start:all": "npm run start:api-gateway & npm run start:song-service & npm run start:database-service & npm run start:error-handler-service"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "mongoose": "^7.0.0",
+    "dotenv": "^16.3.1",
+    "express-http-proxy": "^1.6.2"
+  },
+  "author": "",
+  "license": "ISC"
+}
