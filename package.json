@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start:api-gateway": "node services/api-gateway/app.js",
     "start:song-service": "node services/song-service/app.js",
     "start:database-service": "node services/database-service/mongoose.js",
@@ -12,6 +12,7 @@
     "start:all": "npm run start:api-gateway & npm run start:song-service & npm run start:database-service & npm run start:error-handler-service"
   },
   "dependencies": {
+    "axios": "^1.7.9",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
