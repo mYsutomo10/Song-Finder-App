@@ -2,7 +2,7 @@ const { getRecommendations } = require('../services/spotifyService');
 const { searchSongByLyrics } = require('../services/geniusService');
 const Song = require('../models/Song');
 
-exports.identifySongByLyrics = async (req, res, next) => {
+exports.searchSongByLyrics = async (req, res, next) => {
     try {
         const { lyrics } = req.body;
         const identifiedSong = await searchSongByLyrics(lyrics);
@@ -34,4 +34,9 @@ exports.getRecommendations = async (req, res, next) => {
     } catch (err) {
         next(err);
     }
+};
+
+exports.getRecentFound = async (req, res, next) => {
+    const songs = await Song.find().sort({ identifiedAt: -1 }).limit(10);
+    res.json(songs);
 };
