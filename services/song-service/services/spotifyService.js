@@ -1,31 +1,29 @@
 const axios = require('axios');
 require('dotenv').config();
 
-const getSpotifyToken = async () => {
-    const tokenUrl = 'https://accounts.spotify.com/api/token';
-    const credentials = Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString('base64');
-
-    const response = await axios.post(tokenUrl, 'grant_type=client_credentials', {
-        headers: {
-            Authorization: `Basic ${credentials}`,
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-    });
-
-    return response.data.access_token;
-};
+const BASE_URL = 'https://api.spotify.com/v1';
 
 const getRecommendations = async (trackId) => {
-    const token = await getSpotifyToken();
-    const url = `https://api.spotify.com/v1/recommendations?seed_tracks=${trackId}`;
+    try {
+        const response = await axios.get(`${BASE_URL}/recommendations`, {
+            headers: {
+                Authorization: `Bearer ${process.env.SPOTIFY_API_TOKEN}`,
+            },
+            params: {
+                seed_tracks: trackId, // Seed track ID
+                limit: 10,           // Limit results to 10 songs
+            },
+        });
 
-    const response = await axios.get(url, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
-
-    return response.data.tracks;
+        return response.data.tracks.map(track => ({
+            title: track.name,
+            artist: track.artists.map(artist => artist.name).join(', '),
+            previewUrl: track.preview_url, // Optional: link to song preview
+            spotifyUrl: track.external_urls.spotify, // Optional: link to Spotify page
+        }));
+    } catch (err) {
+        throw new Error(err.response?.data?.error?.message || 'Failed to fetch recommendations from Spotify');
+    }
 };
 
 module.exports = { getRecommendations };
